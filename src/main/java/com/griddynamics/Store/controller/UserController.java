@@ -1,15 +1,11 @@
 package com.griddynamics.Store.controller;
 
 import com.griddynamics.Store.model.User;
-import com.griddynamics.Store.repository.UserRepository;
 import com.griddynamics.Store.service.CartService;
 import com.griddynamics.Store.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpRequest;
-import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import com.griddynamics.Store.security.EncryptedPasswordUtils;
-import com.griddynamics.Store.security.UserDetailsServiceImpl;
 import org.springframework.web.context.request.RequestContextHolder;
 
 import javax.servlet.http.HttpServletRequest;
@@ -25,8 +21,7 @@ public class UserController {
     UserService userService;
 
     @PostMapping("/newUser")
-    public int createUser(@RequestBody User user){
-        user.setId(20L);
+    public ResponseEntity createUser(@RequestBody User user){
         return userService.createNewUser(user);
     }
 
@@ -41,7 +36,7 @@ public class UserController {
     }
 
     @PostMapping("/resetPass")
-    public HttpStatus resetPassword(HttpServletRequest request, @RequestParam String oldPassword,
+    public ResponseEntity resetPassword(HttpServletRequest request, @RequestParam String oldPassword,
                                     @RequestParam String newPassword) {
         return userService.resetPassword(request, oldPassword, newPassword);
     }

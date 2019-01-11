@@ -4,7 +4,7 @@ import com.griddynamics.Store.model.User;
 import com.griddynamics.Store.repository.UserRepository;
 import com.griddynamics.Store.security.EncryptedPasswordUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 import javax.servlet.http.HttpServletRequest;
@@ -14,26 +14,26 @@ public class UserService {
     @Autowired
     UserRepository userRepository;
 
-    public int createNewUser(User user){
+    public ResponseEntity<User> createNewUser(User user){
         if(userRepository.findByEmail(user.getEmail()) == null) {
             User newUser = new User();
             newUser.setEmail(user.getEmail());
             newUser.setPassword(EncryptedPasswordUtils.encryptePassword(user.getPassword()));
             userRepository.save(newUser);
-            return HttpStatus.CREATED.value();
+            return ResponseEntity.status(201).body(newUser);
         }
-        else return HttpStatus.CONFLICT.value();
+        else return ResponseEntity.status(409).build();
     }
 
-    public HttpStatus resetPassword(HttpServletRequest request, String oldPass, String newPass) {
+    public ResponseEntity resetPassword(HttpServletRequest request, String oldPass, String newPass) {
         Long userId = userRepository.findByEmail(request.getUserPrincipal().getName()).getId();
         User user = userRepository.findById(userId).get();
         if(BCrypt.checkpw(oldPass, user.getPassword())){
             user.setPassword(EncryptedPasswordUtils.encryptePassword(newPass));;
             userRepository.save(user);
-            return HttpStatus.OK;
+            return ResponseEntity.status(201).build();
         }
-        else return HttpStatus.CONFLICT;
+        else return ResponseEntity.status(409).build();
     }
 
 }

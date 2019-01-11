@@ -3,7 +3,7 @@ package com.griddynamics.Store.controller;
 import com.griddynamics.Store.model.*;
 import com.griddynamics.Store.service.CartService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -19,12 +19,12 @@ public class ItemController {
     }
 
     @DeleteMapping("/removeItem/{id}")
-    public int removeItem(@PathVariable Long id){
+    public ResponseEntity removeItem(@PathVariable Long id){
         return cartService.removeItemFromCart(id);
     }
 
     @PostMapping("/modifyItem")
-    public HttpStatus modifyItem(@RequestBody Item item) {
+    public ResponseEntity modifyItem(@RequestBody Item item) {
         return cartService.modifyItemInCart(item);
     }
 }

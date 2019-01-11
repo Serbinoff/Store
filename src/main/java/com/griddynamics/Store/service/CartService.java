@@ -7,7 +7,7 @@ import com.griddynamics.Store.repository.OrderRepository;
 import com.griddynamics.Store.repository.ProductRepository;
 import com.griddynamics.Store.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
@@ -60,22 +60,22 @@ public class CartService {
         } else return "Please reduce product's quantity to " + product.getAvailable();
     }
 
-    public int removeItemFromCart(Long id){
+    public ResponseEntity removeItemFromCart(Long id){
         int index = exists(id);
         if (index != -1) {
             cart.remove(index);
-            return HttpStatus.ACCEPTED.value();
-        } else return HttpStatus.NO_CONTENT.value();
+            return ResponseEntity.status(200).build();
+        } else return ResponseEntity.status(204).build();
     }
 
-    public HttpStatus modifyItemInCart(Item item){
+    public ResponseEntity modifyItemInCart(Item item){
         Long id = item.getId();
         int index = exists(id);
         if (index != -1) {
             cart.get(index).setQuantity(item.getQuantity());
-            return HttpStatus.OK;
+            return ResponseEntity.status(200).body(item);
         }
-        else return HttpStatus.NO_CONTENT;
+        else return ResponseEntity.status(204).build();
     }
 
     public List<Product> getItemsFromCart(){
