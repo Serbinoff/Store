@@ -15,6 +15,7 @@ import org.springframework.test.web.servlet.MvcResult;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = StoreApplication.class)
@@ -39,10 +40,7 @@ public class ItemControllerTest extends  AbstractTest{
 
     @Test
     public void whenTryToDeleteNonExistingItemInCart() throws Exception {
-        MvcResult mvcResult = mvc.perform(delete("/removeItem/1"))
+        mvc.perform(delete("/removeItem/1")).andExpect(status().isNoContent())
                 .andReturn();
-
-        String code = mvcResult.getResponse().getContentAsString();
-        assertEquals("204", code);
     }
 }

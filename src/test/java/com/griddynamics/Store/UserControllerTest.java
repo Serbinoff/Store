@@ -26,7 +26,7 @@ public class UserControllerTest extends AbstractTest{
     }
 
     @Test
-    public void whenFindUserByEmailReturnOk() throws Exception {
+    public void whenCreateUserReturnCreated() throws Exception {
         User newUser = new User();
         newUser.setEmail("www@mail.ru");
         newUser.setPassword(EncryptedPasswordUtils.encryptePassword("1234"));
@@ -34,7 +34,7 @@ public class UserControllerTest extends AbstractTest{
          mvc.perform(post("/newUser")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(inputJson))
-                .andExpect(status().isOk());
+                .andExpect(status().isCreated());
     }
 
     @Test
